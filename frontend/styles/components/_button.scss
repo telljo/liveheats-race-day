@@ -1,0 +1,27 @@
+@use "../variables" as v;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: v.$radius-sm;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &--primary {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: transparent;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &--md {
+    padding: v.$spacing-sm v.$spacing-md;
+    font-size: 0.875rem;
+  }
+}

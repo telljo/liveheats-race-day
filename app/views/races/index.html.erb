@@ -1,4 +1,13 @@
+<!-- app/views/races/index.html.erb -->
+<script>
+  (function () {
+    const theme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+
 <div id="app"></div>
+
 <%= vite_client_tag %>
 <%= vite_react_refresh_tag %>
 <%= vite_javascript_tag "application.tsx" %>

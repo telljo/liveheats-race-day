@@ -1,14 +1,11 @@
 // app/frontend/entrypoints/application.tsx
 import React from "react"
 import { createRoot } from "react-dom/client"
+import "../styles/application.scss";
+import App from "../App";
 
-const App = () => (
-  <div>
-    <h1>Race Day</h1>
-  </div>
-)
+const container = document.getElementById("app");
 
-const container = document.getElementById("app")
 if (container) {
-  createRoot(container).render(<App />)
+  createRoot(container).render(<App />);
 }
