@@ -2,8 +2,10 @@
 @use "themes";
 @use "reset";
 @use "base";
+@use "layout";
 
 // components
 @use "components/button";
 @use "components/card";
 @use "components/header";
+@use "components/race_list";

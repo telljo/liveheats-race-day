@@ -1,0 +1,41 @@
+.race-list-item {
+  width: 100%;
+  text-align: left;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+  transition: transform 0.05s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.race-list-item__title {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.race-list-item__meta {
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.race-list-item__chevron {
+  color: var(--color-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+}
