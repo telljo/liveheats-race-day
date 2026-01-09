@@ -1,12 +1,6 @@
 import React from "react";
 import Button from "../../components/Button";
-
-export type RaceSummary = {
-  id: string;
-  name: string;
-  status: "draft" | "completed";
-  laneCount: number;
-};
+import { RaceSummary } from "../../stubs/RaceSummary";
 
 type Props = {
   races: RaceSummary[];

@@ -1,15 +1,11 @@
 import React from "react";
 import Race from "./Race";
-import { RaceSummary } from "./RaceList";
+import { DEMO_RACES } from "../../stubs/DemoRace";
 
 type Props = {
   raceId: string;
 };
 
-const DEMO_RACES: RaceSummary[] = [
-  { id: "1", name: "Year 5 – Heat 1", status: "draft", laneCount: 4 },
-  { id: "2", name: "Year 6 – Final", status: "completed", laneCount: 6 },
-];
 
 export default function RaceShowPage({ raceId }: Props) {
   const race = DEMO_RACES.find((r) => r.id === raceId);

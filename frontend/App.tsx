@@ -3,11 +3,25 @@ import React from "react";
 import Header from "./components/Header";
 import RaceShowPage from "./features/races/RaceShowPage";
 import RaceListPage from "./features/races/RaceListPage";
+import RaceNewPage from "./features/races/RaceNewPage";
+import { Page, PAGES } from "./routing/Pages";
 
 type Props = {
-  page: string;
+  page: Page;
   raceId?: string;
 };
+
+function renderPage(page: Page, raceId?: string) {
+  switch (page) {
+    case PAGES.raceShow:
+      return raceId ? <RaceShowPage raceId={raceId} /> : <RaceListPage />;
+    case PAGES.raceNew:
+      return <RaceNewPage />;
+    case PAGES.racesIndex:
+    default:
+      return <RaceListPage />;
+  }
+}
 
 export default function App({ page, raceId }: Props) {
   return (
@@ -15,26 +29,11 @@ export default function App({ page, raceId }: Props) {
       <Header />
       <main className="page">
         <div className="container">
-          {page === "race-show" && raceId ? (
-            <RaceShowPage raceId={raceId} />
-          ) : (
-            <RaceListPage />
-          )}
+          {
+            renderPage(page, raceId)
+          }
         </div>
       </main>
     </>
-    // <>
-    //   <Header />
-
-    //   <main className="page">
-    //     <div className="container">
-    //       <RaceList
-    //         races={races}
-    //         onCreateRace={() => alert("Create race (next step)")}
-    //         onOpenRace={(id) => alert(`Open race ${id} (next step)`)}
-    //       />
-    //     </div>
-    //   </main>
-    // </>
   );
 }

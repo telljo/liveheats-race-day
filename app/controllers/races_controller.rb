@@ -5,4 +5,7 @@ class RacesController < ApplicationController
   def show
     @race_id = params[:id]
   end
+
+  def new
+  end
 end

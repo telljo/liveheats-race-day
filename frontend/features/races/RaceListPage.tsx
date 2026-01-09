@@ -1,16 +1,12 @@
 import React from "react";
-import RaceList, { RaceSummary } from "./RaceList";
-
-const DEMO_RACES: RaceSummary[] = [
-  { id: "1", name: "Year 5 – Heat 1", status: "draft", laneCount: 4 },
-  { id: "2", name: "Year 6 – Final", status: "completed", laneCount: 6 },
-];
+import { DEMO_RACES } from "../../stubs/DemoRace";
+import RaceList from "./RaceList";
 
 export default function RaceListPage() {
   return (
     <RaceList
       races={DEMO_RACES}
-      onCreateRace={() => alert("Create race (next step)")}
+      onCreateRace={() => (window.location.href = `/races/new`)}
       onOpenRace={(id) => (window.location.href = `/races/${id}`)}
     />
   );
