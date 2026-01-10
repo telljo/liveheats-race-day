@@ -1,5 +1,5 @@
 export interface LaneAssignment {
   id: number;
-  lane: number;
+  laneNumber: number;
   studentId: number;
 }

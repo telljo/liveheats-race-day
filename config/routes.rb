@@ -9,9 +9,8 @@ get "/races/:id", to: "races#show", as: :race
 
   namespace :api do
     namespace :v1 do
-      resources :races, only: [ :index, :show, :create, :update ] do
-        resources :race_results, only: [ :index ]
-      end
+      resources :races, only: [ :index, :show, :create, :update ]
+      resources :students, only: [ :index ]
     end
   end
 end

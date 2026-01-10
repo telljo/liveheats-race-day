@@ -10,10 +10,19 @@ type Props = {
 export default function RaceList({onCreateRace, onOpenRace }: Props) {
   const { data, isLoading, isError, error } = useRaces();
 
-  if (isLoading) return <div className="card">Loading…</div>;
-
-  console.log(data);
-  console.log(data);
+  if (isLoading) return (
+    <section className="stack stack--md">
+      <div className="cluster cluster--between">
+        <h1 style={{ margin: 0 }}>Races</h1>
+        <Button variant="primary" size="md" onClick={onCreateRace}>
+          + New race
+        </Button>
+      </div>
+      <div className="card">
+        Loading…
+      </div>
+    </section>
+  );
 
   return (
     <section className="stack stack--md">
