@@ -1,9 +1,9 @@
 import React from "react";
-import { RaceSummary } from "./RaceList";
 import Button from "../../components/Button";
+import { Race } from "../../types/race";
 
 type Props = {
-  race: RaceSummary;
+  race: Race;
   onBack: () => void;
 };
 
@@ -20,7 +20,7 @@ export default function Race({ race, onBack }: Props) {
       <div className="card">
         <h2 className="card__title">Race details</h2>
         <p className="card__meta">
-          Status: {race.status} • Lanes: {race.laneCount}
+          Status: {race.status}
         </p>
       </div>
     </section>

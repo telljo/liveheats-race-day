@@ -7,6 +7,9 @@ class Race < ApplicationRecord
   validate :lane_assignments_are_valid, if: :completed?
   validate :race_results_are_valid, if: :completed?
 
+  accepts_nested_attributes_for :lane_assignments, reject_if: proc { |attributes| attributes["lane_number"].blank? || attributes["student_id"].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :race_results, reject_if: proc { |attributes| attributes["place"].blank? || attributes["student_id"].blank? }, allow_destroy: true
+
   MIN_STUDENTS = 2
 
   private

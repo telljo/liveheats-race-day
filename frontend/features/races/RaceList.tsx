@@ -1,14 +1,20 @@
 import React from "react";
 import Button from "../../components/Button";
-import { RaceSummary } from "../../stubs/RaceSummary";
+import { useRaces } from "../../hooks/useRaces"
 
 type Props = {
-  races: RaceSummary[];
   onCreateRace: () => void;
-  onOpenRace: (raceId: string) => void;
+  onOpenRace: (raceId: number) => void;
 };
 
-export default function RaceList({ races, onCreateRace, onOpenRace }: Props) {
+export default function RaceList({onCreateRace, onOpenRace }: Props) {
+  const { data, isLoading, isError, error } = useRaces();
+
+  if (isLoading) return <div className="card">Loading…</div>;
+
+  console.log(data);
+  console.log(data);
+
   return (
     <section className="stack stack--md">
       <div className="cluster cluster--between">
@@ -18,7 +24,7 @@ export default function RaceList({ races, onCreateRace, onOpenRace }: Props) {
         </Button>
       </div>
 
-      {races.length === 0 ? (
+      {data?.length === 0 ? (
         <div className="card">
           <h2 className="card__title">No races yet</h2>
           <p className="card__meta">
@@ -32,7 +38,7 @@ export default function RaceList({ races, onCreateRace, onOpenRace }: Props) {
         </div>
       ) : (
         <div className="stack stack--sm">
-          {races.map((race) => (
+          {data?.map((race) => (
             <button
               key={race.id}
               className="race-list-item"
@@ -42,7 +48,7 @@ export default function RaceList({ races, onCreateRace, onOpenRace }: Props) {
               <div className="race-list-item__main">
                 <div className="race-list-item__title">{race.name}</div>
                 <div className="race-list-item__meta">
-                  {race.laneCount} lanes • {race.status === "completed" ? "Completed" : "Draft"}
+                  {race.status === "completed" ? "Completed" : "Draft"}
                 </div>
               </div>
 

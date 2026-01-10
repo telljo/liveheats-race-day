@@ -1,11 +1,5 @@
 class RacesController < ApplicationController
-  def index
-  end
-
-  def show
-    @race_id = params[:id]
-  end
-
-  def new
-  end
+  def index; end
+  def new; end
+  def show; end
 end

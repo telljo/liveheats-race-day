@@ -1,16 +1,17 @@
 import React from "react";
 import Race from "./Race";
-import { DEMO_RACES } from "../../stubs/DemoRace";
+import { useRace } from "../../hooks/useRaces"
 
 type Props = {
   raceId: string;
 };
 
-
 export default function RaceShowPage({ raceId }: Props) {
-  const race = DEMO_RACES.find((r) => r.id === raceId);
+  const { data, isLoading, isError, error } = useRace(+raceId);
 
-  if (!race) {
+  if (isLoading) return <div className="card">Loading…</div>;
+
+  if (isError || !data) {
     return (
       <div className="card">
         <h1 className="card__title">Race not found</h1>
@@ -24,7 +25,7 @@ export default function RaceShowPage({ raceId }: Props) {
 
   return (
     <Race
-      race={race}
+      race={data}
       onBack={() => (window.location.href = "/races")}
     />
   );
