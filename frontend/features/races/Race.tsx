@@ -48,8 +48,8 @@ export default function Race({ race, raceId, onBack }: Props) {
       <section className="stack stack--md">
         <div className="cluster cluster--between">
           <h1 style={{ margin: 0 }}>{race.name}</h1>
-          <Button variant="primary" size="md" onClick={onBack}>
-            ‹ Back
+          <Button variant="secondary" size="md" onClick={onBack}>
+            ‹ Back to Races
           </Button>
         </div>
 

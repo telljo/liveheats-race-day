@@ -49,15 +49,13 @@ In particular:
   - Makes future extensions (editing, re-running, or aggregating races) easier to reason about
 
 ### Testing Strategy
-- Testing effort was deliberately focused on domain and backend logic, where correctness is most critical.
+- Testing effort was primarily focused on backend logic using RSpec, where correctness is most critical.
 - Core race rules and placement validation are fully unit tested
 - Business logic is tested independently of UI concerns
 - Tests are fast, deterministic, and easy to reason about
-
-Frontend testing was considered but ultimately kept out of scope due to time constraints, with the conscious trade-off that:
-- UI logic remains relatively simple and explicit
-- Domain rules are protected regardless of frontend behaviour
-- Frontend tests could be added later without refactoring core logic
+- Light frontend testing due to time constraints
+  - Domain rules are protected regardless of frontend behaviour
+  - Frontend tests could be added later without refactoring core logic
 
 ### Extension Readiness
 - Although the implementation is intentionally minimal, the design supports future extensions such as:
@@ -128,6 +126,11 @@ Tests for the Ruby on Rails code are written in RSpec. The full spec suite can b
 bundle exec rspec
 ```
 
+Tests for the React code are using Vitest. The full spec suite can be run with:
+```sh
+npm test
+```
+
 ## Rubocop
 
 ```sh
@@ -152,7 +155,6 @@ The application assumes a single teacher managing races for a single school, all
 - Authentication, authorization, and roles are out of scope
 - Styling and UX focus on clarity and usability rather than visual polish
 - Designed to be extendable rather than exhaustive
-- Frontend testing was out of scope due to time constraints
 
 ## License
 
