@@ -4,19 +4,25 @@ import { useRaces } from "../../hooks/useRaces"
 
 type Props = {
   onCreateRace: () => void;
+  onViewStudents: () => void;
   onOpenRace: (raceId: number) => void;
 };
 
-export default function RaceList({onCreateRace, onOpenRace }: Props) {
-  const { data: races, isLoading, isError, error } = useRaces();
+export default function RaceList({onCreateRace, onViewStudents, onOpenRace }: Props) {
+  const { data: races, isLoading } = useRaces();
 
   if (isLoading) return (
     <section className="stack stack--md">
       <div className="cluster cluster--between">
         <h1 style={{ margin: 0 }}>Races</h1>
-        <Button variant="primary" size="md" onClick={onCreateRace}>
-          + New race
-        </Button>
+        <span className="cluster">
+          <Button variant="primary" size="md" onClick={onViewStudents}>
+            View students
+          </Button>
+          <Button variant="primary" size="md" onClick={onCreateRace}>
+            + New race
+          </Button>
+        </span>
       </div>
       <div className="card">
         Loading…
@@ -28,9 +34,14 @@ export default function RaceList({onCreateRace, onOpenRace }: Props) {
     <section className="stack stack--md">
       <div className="cluster cluster--between">
         <h1 style={{ margin: 0 }}>Races</h1>
-        <Button variant="primary" size="md" onClick={onCreateRace}>
-          + New race
-        </Button>
+        <span className="cluster">
+          <Button variant="primary" size="md" onClick={onViewStudents}>
+            View students
+          </Button>
+          <Button variant="primary" size="md" onClick={onCreateRace}>
+            + New race
+          </Button>
+        </span>
       </div>
 
       {races?.length === 0 ? (

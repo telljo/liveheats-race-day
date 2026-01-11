@@ -54,7 +54,7 @@ export default function NewStudent({ onCancel }: Props) {
         </Button>
 
         <Button
-          variant="primary"
+          variant="success"
           size="md"
           disabled={createStudentMutation.isPending}
           onClick={handleSave}

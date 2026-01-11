@@ -8,11 +8,11 @@ export default function NewStudentPage() {
       <div className="cluster cluster--between">
         <h1 style={{ margin: 0 }}>New Student</h1>
         <Button
-          variant="primary"
+          variant="secondary"
           size="md"
           onClick={() => (window.location.href = "/students")}
         >
-          ‹ Back
+          ‹ Back to Students
         </Button>
       </div>
 

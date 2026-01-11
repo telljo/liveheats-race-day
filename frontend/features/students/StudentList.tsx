@@ -20,7 +20,7 @@ export default function StudentList({onCreateStudent}: Props) {
             size="md"
             onClick={() => (window.location.href = "/races")}
           >
-            ‹ Back
+            ‹ Back to Races
           </Button>
           <Button variant="primary" size="md" onClick={onCreateStudent}>
             + New student
@@ -43,7 +43,7 @@ export default function StudentList({onCreateStudent}: Props) {
             size="md"
             onClick={() => (window.location.href = "/races")}
           >
-            ‹ Back
+            ‹ Back to Races
           </Button>
           <Button variant="primary" size="md" onClick={onCreateStudent}>
             + New student

@@ -212,7 +212,7 @@ export default function NewRace({ onCancel, onCreateStudent }: Props) {
         </Button>
 
         <Button
-          variant="primary"
+          variant="success"
           size="md"
           disabled={createRaceMutation.isPending}
           onClick={handleSave}

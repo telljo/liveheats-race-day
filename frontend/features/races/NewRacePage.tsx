@@ -8,11 +8,11 @@ export default function NewRacePage() {
       <div className="cluster cluster--between">
         <h1 style={{ margin: 0 }}>New race</h1>
         <Button
-          variant="primary"
+          variant="secondary"
           size="md"
           onClick={() => (window.location.href = "/races")}
         >
-          ‹ Back
+          ‹ Back to Races
         </Button>
       </div>
 

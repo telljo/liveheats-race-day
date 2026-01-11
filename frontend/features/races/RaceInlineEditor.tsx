@@ -396,7 +396,7 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
 
                 <div className="cluster">
                   <Button
-                    variant="secondary"
+                    variant="primary"
                     size="sm"
                     onClick={autoFillPlacesSequential}
                     disabled={isBusy || activeAssignedLanes.length < 2}
@@ -479,7 +479,7 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
 
               <div className="cluster">
                 <Button
-                  variant="primary"
+                  variant="success"
                   size="md"
                   disabled={isBusy || !allPlacesSelected || !placingsAreValid}
                   onClick={() => completeMutation.mutate(buildCompleteParams())}
