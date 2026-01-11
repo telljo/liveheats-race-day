@@ -10,6 +10,7 @@
   color: var(--color-muted);
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--color-border);
+  text-wrap: nowrap;
 }
 
 .table tbody td {
@@ -27,7 +28,11 @@
 
 .table__lane {
   font-weight: 600;
-  width: 4rem;
+  width: 5rem;
+}
+
+.table__date {
+  width: 20rem;
 }
 
 .table__muted {

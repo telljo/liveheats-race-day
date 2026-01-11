@@ -7,20 +7,6 @@ RSpec.describe Race, type: :model do
   let(:s2) { create(:student) }
   let(:s3) { create(:student) }
 
-  def build_race_with_lanes(*students, name: "Test race", status: :draft)
-    build(:race, name:, status:).tap do |race|
-      students.each_with_index do |student, idx|
-        race.lane_assignments.build(student:, lane_number: idx + 1)
-      end
-    end
-  end
-
-  def add_results(race, places_by_student)
-    places_by_student.each do |student, place|
-      race.race_results.build(student:, place:)
-    end
-  end
-
   describe "validations" do
     context "when name is missing" do
       it "requires name" do
@@ -45,14 +31,14 @@ RSpec.describe Race, type: :model do
 
     describe "race result validation (context: :complete)" do
       it "does NOT validate race results in the default context" do
-        race = build_race_with_lanes(s1, s2, s3)
+        race = build_race_with_lanes(s1, s2, s3, name: name)
         add_results(race, s1 => 1, s2 => 1, s3 => 2) # invalid ranking
 
         expect(race).to be_valid
       end
 
       it "allows ties with valid competition ranking when completing" do
-        race = build_race_with_lanes(s1, s2, s3)
+        race = build_race_with_lanes(s1, s2, s3, name: name)
         add_results(race, s1 => 1, s2 => 1, s3 => 3)
 
         expect { race.complete! }.not_to raise_error
@@ -60,7 +46,7 @@ RSpec.describe Race, type: :model do
       end
 
       it "rejects invalid competition ranking when completing" do
-        race = build_race_with_lanes(s1, s2, s3)
+        race = build_race_with_lanes(s1, s2, s3, name: name)
         add_results(race, s1 => 1, s2 => 1, s3 => 2) # should be 3
 
         expect { race.complete! }.to raise_error(ActiveRecord::RecordInvalid)
@@ -70,7 +56,7 @@ RSpec.describe Race, type: :model do
       end
 
       it "can be checked directly via valid?(:complete)" do
-        race = build_race_with_lanes(s1, s2, s3)
+        race = build_race_with_lanes(s1, s2, s3, name: name)
         add_results(race, s1 => 1, s2 => 1, s3 => 2) # invalid
 
         expect(race.valid?(:complete)).to eq(false)

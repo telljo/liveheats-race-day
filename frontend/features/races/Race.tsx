@@ -12,7 +12,7 @@ type Props = {
 
 export default function Race({ race, raceId, onBack }: Props) {
   const isDraft = race.status === "draft";
-  const { data: students = [], isLoading, isError, error } = useStudents();
+  const { data: students = [], isLoading } = useStudents();
 
   const studentsById = useMemo(() => {
     return new Map(students.map((s) => [s.id, s]));
@@ -35,10 +35,13 @@ export default function Race({ race, raceId, onBack }: Props) {
       }));
   }, [race.laneAssignments, studentsById, raceResultsByStudentId]);
 
-
   if (isLoading) return <div className="card">Loading…</div>;
-  if (isError)
-    return <div className="card">Error: {(error as Error)?.message}</div>;
+
+  const completedDate = Intl.DateTimeFormat("en-GB", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone: "Australia/Sydney",
+  }).format(new Date(race.updatedAt))
 
   if(!isDraft) {
     return (
@@ -64,6 +67,7 @@ export default function Race({ race, raceId, onBack }: Props) {
                     <th>Lane</th>
                     <th>Student</th>
                     <th>Place</th>
+                    <th>Completed at</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -89,6 +93,7 @@ export default function Race({ race, raceId, onBack }: Props) {
                           <span className="table__muted">—</span>
                         )}
                       </td>
+                      <td className="table__date">{completedDate}</td>
                     </tr>
                   ))}
                 </tbody>
