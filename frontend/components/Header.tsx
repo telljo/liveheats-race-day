@@ -1,4 +1,3 @@
-// frontend/src/components/Header.tsx
 import ThemeSwitcher from "./ThemeSwitcher";
 import React from "react";
 

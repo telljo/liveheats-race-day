@@ -1,6 +1,6 @@
 import camelcaseKeysDeep from "camelcase-keys-deep";
-import { LaneAssignment } from "./laneAssigment";
-import { RaceResult } from "./RaceResult";
+import { LaneAssignment, LaneAssignmentParams } from "./laneAssigment";
+import { RaceResult, RaceResultParams } from "./RaceResult";
 
 export type RaceStatus = "draft" | "completed";
 
@@ -25,6 +25,17 @@ export interface Race {
   laneAssignments: LaneAssignment[];
   raceResults: RaceResult[];
 }
+
+export type CreateRaceParams = {
+  name: string;
+  lane_assignments_attributes: LaneAssignmentParams[];
+};
+
+export type RaceUpsertParams = {
+  name: string;
+  lane_assignments_attributes: LaneAssignmentParams[];
+  race_results_attributes?: RaceResultParams[];
+};
 
 export function mapRaceApiToRace(r: ApiRace): Race {
   return camelcaseKeysDeep(r) as Race;

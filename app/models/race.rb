@@ -4,19 +4,32 @@ class Race < ApplicationRecord
   has_many :race_results, dependent: :destroy
   enum :status, { draft: 0, completed: 1 }
 
-  validate :lane_assignments_are_valid, if: :completed?
-  validate :race_results_are_valid, if: :completed?
+  accepts_nested_attributes_for :lane_assignments,
+    reject_if: ->(attrs) { attrs["lane_number"].blank? || attrs["student_id"].blank? },
+    allow_destroy: true
 
-  accepts_nested_attributes_for :lane_assignments, reject_if: proc { |attributes| attributes["lane_number"].blank? || attributes["student_id"].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :race_results, reject_if: proc { |attributes| attributes["place"].blank? || attributes["student_id"].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :race_results,
+    reject_if: ->(attrs) { attrs["place"].blank? || attrs["student_id"].blank? },
+    allow_destroy: true
+
+  validates :name, presence: true
+  validate :lane_assignments_are_valid
+  validate :race_results_are_valid, on: :complete
 
   MIN_STUDENTS = 2
+
+  def complete!
+    transaction do
+      self.status = :completed
+      save!(context: :complete)
+    end
+  end
 
   private
 
   def lane_assignments_are_valid
     lane_assignment_errors = Races::ValidateLaneAssignments.call(
-      lane_assignments.map do |la|
+      lane_assignments.reject(&:marked_for_destruction?).map do |la|
         {
           lane_number: la.lane_number,
           student_id: la.student_id

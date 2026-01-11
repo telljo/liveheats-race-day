@@ -6,12 +6,12 @@ type Props = {
   raceId: string;
 };
 
-export default function RaceShowPage({ raceId }: Props) {
-  const { data, isLoading, isError, error } = useRace(+raceId);
+export default function ShowRacePage({ raceId }: Props) {
+  const { data: race, isLoading, isError } = useRace(+raceId);
 
   if (isLoading) return <div className="card">Loading…</div>;
 
-  if (isError || !data) {
+  if (isError || !race) {
     return (
       <div className="card">
         <h1 className="card__title">Race not found</h1>
@@ -25,7 +25,8 @@ export default function RaceShowPage({ raceId }: Props) {
 
   return (
     <Race
-      race={data}
+      race={race}
+      raceId={+raceId}
       onBack={() => (window.location.href = "/races")}
     />
   );

@@ -1,11 +1,10 @@
-// frontend/src/App.tsx
 import React from "react";
 import Header from "./components/Header";
-import RaceShowPage from "./features/races/RaceShowPage";
 import RaceListPage from "./features/races/RaceListPage";
-import RaceNewPage from "./features/races/RaceNewPage";
 import { Page, PAGES } from "./routing/Pages";
 import { Toaster } from "react-hot-toast";
+import ShowRacePage from "./features/races/ShowRacePage";
+import NewRacePage from "./features/races/NewRacePage";
 
 type Props = {
   page: Page;
@@ -15,9 +14,9 @@ type Props = {
 function renderPage(page: Page, raceId?: string) {
   switch (page) {
     case PAGES.raceShow:
-      return raceId ? <RaceShowPage raceId={raceId} /> : <RaceListPage />;
+      return raceId ? <ShowRacePage raceId={raceId} /> : <RaceListPage />;
     case PAGES.raceNew:
-      return <RaceNewPage />;
+      return <NewRacePage />;
     case PAGES.racesIndex:
     default:
       return <RaceListPage />;

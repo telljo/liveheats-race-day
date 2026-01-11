@@ -5,7 +5,7 @@ import { ApiError } from "./client";
 let lastToastKey: string | null = null;
 let lastToastAt = 0;
 
-function toastOnce(key: string, fn: () => void, windowMs = 1500) {
+export function toastOnce(key: string, fn: () => void, windowMs = 1500) {
   const now = Date.now();
   if (lastToastKey === key && now - lastToastAt < windowMs) return;
   lastToastKey = key;

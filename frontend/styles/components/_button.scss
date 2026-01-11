@@ -20,6 +20,36 @@
     }
   }
 
+  &--secondary {
+    background-color: var(--color-secondary);
+    color: #333;
+    border-color: transparent;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &--success {
+    background-color: var(--color-success);
+    color: white;
+    border-color: transparent;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &--danger {
+    background-color: var(--color-danger);
+    color: white;
+    border-color: transparent;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
   &--md {
     padding: v.$spacing-sm v.$spacing-md;
     font-size: 0.875rem;

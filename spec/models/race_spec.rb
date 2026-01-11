@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Race, type: :model do
-  let(:race) { create(:race, status: :draft) }
+  let(:name) { "Test" }
+  let(:race) { create(:race, name: name, status: :draft) }
 
   let(:s1) { create(:student) }
   let(:s2) { create(:student) }
@@ -20,6 +21,13 @@ RSpec.describe Race, type: :model do
   end
 
   describe "validations" do
+    context "when name is missing" do
+      let!(:name) { nil }
+      it "requires name" do
+        expect(race).not_to be_valid
+      end
+    end
+
     context "when completed" do
       it "requires at least MIN_STUDENTS lane assignments" do
         create(:lane_assignment, race:, student: s1, lane_number: 1)
