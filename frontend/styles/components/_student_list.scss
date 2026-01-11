@@ -1,0 +1,25 @@
+.student-list-item {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.student-list-item__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-list-item__title {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+

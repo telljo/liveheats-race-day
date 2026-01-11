@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function RaceList({onCreateRace, onOpenRace }: Props) {
-  const { data, isLoading, isError, error } = useRaces();
+  const { data: races, isLoading, isError, error } = useRaces();
 
   if (isLoading) return (
     <section className="stack stack--md">
@@ -33,7 +33,7 @@ export default function RaceList({onCreateRace, onOpenRace }: Props) {
         </Button>
       </div>
 
-      {data?.length === 0 ? (
+      {races?.length === 0 ? (
         <div className="card">
           <h2 className="card__title">No races yet</h2>
           <p className="card__meta">
@@ -47,7 +47,7 @@ export default function RaceList({onCreateRace, onOpenRace }: Props) {
         </div>
       ) : (
         <div className="stack stack--sm">
-          {data?.map((race) => (
+          {races?.map((race) => (
             <button
               key={race.id}
               className="race-list-item"

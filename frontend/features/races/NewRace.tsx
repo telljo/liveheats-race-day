@@ -6,6 +6,7 @@ import { CreateRaceParams } from "../../types/race";
 
 type Props = {
   onCancel: () => void;
+  onCreateStudent: () => void;
 };
 
 type LaneAssignmentDraft = {
@@ -17,7 +18,7 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
-export default function NewRace({ onCancel }: Props) {
+export default function NewRace({ onCancel, onCreateStudent }: Props) {
   const { data: students = [], isLoading, isError } = useStudents();
   const createRaceMutation = useCreateRace();
 
@@ -134,29 +135,40 @@ export default function NewRace({ onCancel }: Props) {
                       Lane {laneNumber}
                     </div>
 
-                    <select
-                      className="input"
-                      style={{ flex: 1 }}
-                      value={la.studentId ?? ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        updateLaneAssignment(la.id, val ? Number(val) : null);
-                      }}
-                    >
-                      <option value="">Select a student…</option>
-                      {students.map((s) => {
-                        const label = `${s.firstName} ${s.lastName}`.trim();
-                        const disabled =
-                          // disable if picked in another lane
-                          selectedStudentIds.has(s.id) && la.studentId !== s.id;
+                    {students.length === 0 ? (
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={onCreateStudent}
+                      >
+                        + Create a student
+                      </Button>
+                    ) : (
+                      <select
+                        className="input"
+                        style={{ flex: 1 }}
+                        value={la.studentId ?? ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateLaneAssignment(la.id, val ? Number(val) : null);
+                        }}
+                      >
+                        <option value="">Select a student…</option>
 
-                        return (
-                          <option key={s.id} value={s.id} disabled={disabled}>
-                            {label}
-                          </option>
-                        );
-                      })}
-                    </select>
+                        {students.map((s) => {
+                          const label = `${s.firstName} ${s.lastName}`.trim();
+                          const disabled =
+                            selectedStudentIds.has(s.id) && la.studentId !== s.id;
+
+                          return (
+                            <option key={s.id} value={s.id} disabled={disabled}>
+                              {label}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+
                   </div>
 
                   {/* allow removing filled rows (but keep at least one row overall) */}
@@ -175,9 +187,23 @@ export default function NewRace({ onCancel }: Props) {
           </div>
         )}
 
-        <span style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}>
-          Tip: selecting a student in the last row will automatically add a new lane.
+        <span>
+          Tips:
         </span>
+        <ul style={{margin: 0}}>
+        <li>
+          <span style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}>
+            Selecting a student in the last row will automatically add a new lane.
+          </span>
+        </li>
+        {students.length === 0 ? (
+          <li>
+            <span style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}>
+              Before you create a race, go ahead and create some students.
+            </span>
+          </li>
+        ): (<></>)}
+        </ul>
       </div>
 
       <div className="cluster cluster--between">

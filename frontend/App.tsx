@@ -5,6 +5,8 @@ import { Page, PAGES } from "./routing/Pages";
 import { Toaster } from "react-hot-toast";
 import ShowRacePage from "./features/races/ShowRacePage";
 import NewRacePage from "./features/races/NewRacePage";
+import StudentListPage from "./features/students/StudentListPage";
+import NewStudentPage from "./features/students/NewStudentPage";
 
 type Props = {
   page: Page;
@@ -13,6 +15,10 @@ type Props = {
 
 function renderPage(page: Page, raceId?: string) {
   switch (page) {
+    case PAGES.studentsIndex:
+      return <StudentListPage />
+    case PAGES.studentNew:
+      return <NewStudentPage />
     case PAGES.raceShow:
       return raceId ? <ShowRacePage raceId={raceId} /> : <RaceListPage />;
     case PAGES.raceNew:

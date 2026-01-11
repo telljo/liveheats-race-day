@@ -18,6 +18,11 @@ export interface Student {
   updatedAt: string;
 }
 
+export type CreateStudentParams = {
+  first_name: string;
+  last_name: string;
+};
+
 export function mapStudentApiToStudent(r: ApiStudent): Student {
   return camelcaseKeysDeep(r) as Student;
 }

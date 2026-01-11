@@ -16,7 +16,10 @@ export default function NewRacePage() {
         </Button>
       </div>
 
-      <NewRace onCancel={() => (window.location.href = "/races")} />
+      <NewRace
+        onCancel={() => (window.location.href = "/races")}
+        onCreateStudent={() => (window.location.href = "/students/new")}
+      />
     </section>
   );
 }
