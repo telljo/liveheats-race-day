@@ -32,7 +32,7 @@ class Api::V1::RacesController < Api::V1::BaseController
   end
 
   def complete
-    @race.assign_attributes(race_params)
+    @race.assign_attributes(complete_race_params)
 
     begin
       @race.complete!
@@ -56,6 +56,17 @@ class Api::V1::RacesController < Api::V1::BaseController
         :student_id,
         :lane_number,
         :_destroy
+      ]
+    )
+  end
+
+  def complete_race_params
+    params.require(:race).permit(
+      :name,
+      race_results_attributes: [
+        :id,
+        :student_id,
+        :place,
       ]
     )
   end

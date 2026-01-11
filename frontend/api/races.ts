@@ -1,4 +1,4 @@
-import { ApiRace, CreateRaceParams, mapRaceApiToRace, Race, RaceUpsertParams } from "../types/race";
+import { ApiRace, CompleteRaceParams, CreateRaceParams, mapRaceApiToRace, Race, RaceUpsertParams } from "../types/race";
 import { apiFetch } from "./client";
 
 export async function fetchRaces(): Promise<Race[]> {
@@ -28,10 +28,10 @@ export async function updateRace(id: number, params: RaceUpsertParams): Promise<
   return mapRaceApiToRace(data);
 }
 
-export async function completeRace(id: number, params: CreateRaceParams): Promise<Race> {
+export async function completeRace(id: number, params: CompleteRaceParams): Promise<Race> {
   const data = await apiFetch<ApiRace>(`/api/v1/races/${id}/complete`, {
     method: "POST",
-    json: { race: { name: params.name, lane_assignments_attributes: params.lane_assignments_attributes } },
+    json: { race: { name: params.name, race_results_attributes: params.race_results_attributes } },
   });
   return mapRaceApiToRace(data);
 }

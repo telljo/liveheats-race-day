@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { completeRace, createRace, fetchRace, fetchRaces, updateRace } from "../api/races";
-import { CreateRaceParams, Race, RaceUpsertParams } from "../types/race";
+import { CompleteRaceParams, CreateRaceParams, Race, RaceUpsertParams } from "../types/race";
 import { toast } from "react-hot-toast";
 import { toastOnce } from "../api/queryClient";
 
@@ -48,7 +48,7 @@ export function useUpdateRace(id: number) {
 export function useCompleteRace(raceId: number) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (params: CreateRaceParams) => completeRace(raceId, params),
+    mutationFn: (params: CompleteRaceParams) => completeRace(raceId, params),
     onSuccess: (race) => {
       toastOnce("completed", () => toast.success("Race completed!"));
       qc.invalidateQueries({ queryKey: ["races"] });

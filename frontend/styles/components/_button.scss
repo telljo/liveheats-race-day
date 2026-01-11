@@ -10,6 +10,12 @@
   font-weight: 500;
   transition: background-color 0.15s ease, color 0.15s ease;
 
+  &:disabled {
+    background-color: var(--color-muted);
+    color: var(--color-text);
+    cursor: not-allowed;
+  }
+
   &--primary {
     background-color: var(--color-primary);
     color: white;

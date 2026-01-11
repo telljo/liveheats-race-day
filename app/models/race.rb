@@ -9,8 +9,7 @@ class Race < ApplicationRecord
     allow_destroy: true
 
   accepts_nested_attributes_for :race_results,
-    reject_if: ->(attrs) { attrs["place"].blank? || attrs["student_id"].blank? },
-    allow_destroy: true
+    reject_if: ->(attrs) { attrs["place"].blank? || attrs["student_id"].blank? }
 
   validates :name, presence: true
   validate :lane_assignments_are_valid

@@ -34,8 +34,12 @@ export type CreateRaceParams = {
 export type RaceUpsertParams = {
   name: string;
   lane_assignments_attributes: LaneAssignmentParams[];
-  race_results_attributes?: RaceResultParams[];
 };
+
+export type CompleteRaceParams = {
+  name: string;
+  race_results_attributes?: RaceResultParams[];
+}
 
 export function mapRaceApiToRace(r: ApiRace): Race {
   return camelcaseKeysDeep(r) as Race;
