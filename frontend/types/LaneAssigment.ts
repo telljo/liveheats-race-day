@@ -5,8 +5,8 @@ export interface LaneAssignment {
 }
 
 export type LaneAssignmentParams = {
-  id?: number,
+  id?: number;
   lane_number: number;
   student_id: number;
   _destroy?: boolean;
-};
+}

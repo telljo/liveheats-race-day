@@ -29,20 +29,23 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
   const [step, setStep] = useState<Step>("edit");
 
   const [lanes, setLanes] = useState<DraftLane[]>(() => {
-    const existing =
-      (race.laneAssignments ?? [])
-        .slice()
-        .sort((a, b) => a.laneNumber - b.laneNumber)
-        .map((la) => ({
-          id: la.id,
-          laneNumber: la.laneNumber,
-          studentId: la.studentId ?? null,
-        }));
+    const existing = (race.laneAssignments ?? [])
+      .slice()
+      .sort((a, b) => a.laneNumber - b.laneNumber)
+      .map((la) => ({
+        id: la.id,
+        laneNumber: la.laneNumber,
+        studentId: la.studentId ?? null,
+      }));
 
     // Ensure at least one row, and a trailing blank
-    const base = existing.length ? existing : [{ laneNumber: 1, studentId: null }];
+    const base = existing.length
+      ? existing
+      : [{ laneNumber: 1, studentId: null }];
     const last = base[base.length - 1];
-    return last.studentId ? [...base, { laneNumber: base.length + 1, studentId: null }] : base;
+    return last.studentId
+      ? [...base, { laneNumber: base.length + 1, studentId: null }]
+      : base;
   });
 
   const selectedStudentIds = useMemo(() => {
@@ -104,7 +107,9 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
 
       // If it exists in DB, mark for destroy (but it won't affect numbering)
       if (lane.id) {
-        const next = prev.map((l, i) => (i === index ? { ...l, _destroy: true } : l));
+        const next = prev.map((l, i) =>
+          i === index ? { ...l, _destroy: true } : l
+        );
         return normalizeLanes(next);
       }
 
@@ -130,9 +135,7 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
 
   // ---------- Results step state ----------
   const activeAssignedLanes = useMemo(() => {
-    return lanes
-      .filter((l) => !l._destroy)
-      .filter((l) => l.studentId != null);
+    return lanes.filter((l) => !l._destroy).filter((l) => l.studentId != null);
   }, [lanes]);
 
   const studentsById = useMemo(() => {
@@ -156,19 +159,22 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
     // NOTE: intentionally only depends on race + activeAssignedLanes
   }, [race.raceResults, activeAssignedLanes]);
 
-  const [placesByStudentId, setPlacesByStudentId] = useState<Record<number, number | null>>(
-    () => initialPlacesByStudentId
-  );
+  const [placesByStudentId, setPlacesByStudentId] = useState<
+    Record<number, number | null>
+  >(() => initialPlacesByStudentId);
 
   // Keep places map in sync when assigned students change
   React.useEffect(() => {
     setPlacesByStudentId((prev) => {
       const next: Record<number, number | null> = { ...prev };
-      const assigned = new Set(activeAssignedLanes.map((l) => l.studentId as number));
+      const assigned = new Set(
+        activeAssignedLanes.map((l) => l.studentId as number)
+      );
 
       // add missing
       for (const studentId of assigned) {
-        if (!(studentId in next)) next[studentId] = initialPlacesByStudentId[studentId] ?? null;
+        if (!(studentId in next))
+          next[studentId] = initialPlacesByStudentId[studentId] ?? null;
       }
 
       // remove stale
@@ -240,7 +246,25 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
   const isBusy = updateMutation.isPending || completeMutation.isPending;
 
   // Must have at least 2 filled lanes to proceed to results
-  const canEnterResultsStep = name.trim().length > 0 && activeAssignedLanes.length >= 2;
+  const canEnterResultsStep =
+    name.trim().length > 0 && activeAssignedLanes.length >= 2;
+
+  const mapRaceToDraftLanes = (race: Race): DraftLane[] =>
+    (race.laneAssignments ?? []).map((la) => ({
+      id: la.id,
+      laneNumber: la.laneNumber,
+      studentId: la.studentId,
+    }))
+    .sort((a, b) => a.laneNumber - b.laneNumber);
+
+  const handleSaveAndNext = () => {
+    updateMutation.mutate(buildDraftParams(), {
+      onSuccess: (updatedRace) => {
+        setLanes(mapRaceToDraftLanes(updatedRace));
+        setStep("results");
+      },
+    });
+  };
 
   function autoFillPlacesSequential() {
     // 1..N based on lane order (ties can be edited manually)
@@ -264,18 +288,19 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
           variant="secondary"
           size="md"
           onClick={() => {
-            if (step === "results") return setStep("edit");
             onBack();
           }}
           disabled={isBusy}
         >
-          ‹ Back
+          ‹ Back to Races
         </Button>
       </div>
 
       <div className="card stack stack--md">
         <label>
-          <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>Race name</div>
+          <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>
+            Race name
+          </div>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -309,8 +334,13 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                             borderRadius: 8,
                           }}
                         >
-                          <div className="cluster" style={{ gap: "0.75rem", flex: 1 }}>
-                            <div style={{ width: 90, color: "var(--color-muted)" }}>
+                          <div
+                            className="cluster"
+                            style={{ gap: "0.75rem", flex: 1 }}
+                          >
+                            <div
+                              style={{ width: 90, color: "var(--color-muted)" }}
+                            >
                               Lane {lane.laneNumber}
                             </div>
 
@@ -329,10 +359,15 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                               <option value="">Select a student…</option>
                               {students.map((s) => {
                                 const disabled =
-                                  selectedStudentIds.has(s.id) && lane.studentId !== s.id;
+                                  selectedStudentIds.has(s.id) &&
+                                  lane.studentId !== s.id;
 
                                 return (
-                                  <option key={s.id} value={s.id} disabled={disabled}>
+                                  <option
+                                    key={s.id}
+                                    value={s.id}
+                                    disabled={disabled}
+                                  >
                                     {s.firstName} {s.lastName}
                                   </option>
                                 );
@@ -357,33 +392,32 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                 );
               })()}
 
-              <div style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}>
-                Selecting a student in the last lane adds another lane automatically.
+              <div
+                style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}
+              >
+                Selecting a student in the last lane adds another lane
+                automatically.
               </div>
             </div>
 
             <div className="cluster cluster--between">
-              <Button variant="secondary" size="md" onClick={onBack} disabled={isBusy}>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={onBack}
+                disabled={isBusy}
+              >
                 Cancel
               </Button>
 
               <div className="cluster">
                 <Button
-                  variant="success"
-                  size="md"
-                  disabled={!canSaveDraft || isBusy}
-                  onClick={() => updateMutation.mutate(buildDraftParams())}
-                >
-                  Save draft
-                </Button>
-
-                <Button
                   variant="primary"
                   size="md"
-                  disabled={!canEnterResultsStep || isBusy}
-                  onClick={() => setStep("results")}
+                  disabled={!canSaveDraft || !canEnterResultsStep || isBusy}
+                  onClick={handleSaveAndNext}
                 >
-                  Next ›
+                  Save & Next ›
                 </Button>
               </div>
             </div>
@@ -406,13 +440,20 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                 </div>
               </div>
 
-              <div style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}>
-                For ties, select the same place for tied students (e.g. 1, 1, 3).
+              <div
+                style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}
+              >
+                For ties, select the same place for tied students (e.g. 1, 1,
+                3).
               </div>
 
               {allPlacesSelected && !placingsAreValid && (
-                <div className="card__meta" style={{ color: "var(--color-danger)" }}>
-                  Placings are invalid. With ties, places must use competition ranking (e.g. 1, 1, 3).
+                <div
+                  className="card__meta"
+                  style={{ color: "var(--color-danger)" }}
+                >
+                  Placings are invalid. With ties, places must use competition
+                  ranking (e.g. 1, 1, 3).
                 </div>
               )}
 
@@ -438,7 +479,9 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                           {student ? (
                             `${student.firstName} ${student.lastName}`
                           ) : (
-                            <span className="table__muted">Unknown student</span>
+                            <span className="table__muted">
+                              Unknown student
+                            </span>
                           )}
                         </td>
 
@@ -447,8 +490,13 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
                             className="input"
                             value={placesByStudentId[sid] ?? ""}
                             onChange={(e) => {
-                              const v = e.target.value ? Number(e.target.value) : null;
-                              setPlacesByStudentId((prev) => ({ ...prev, [sid]: v }));
+                              const v = e.target.value
+                                ? Number(e.target.value)
+                                : null;
+                              setPlacesByStudentId((prev) => ({
+                                ...prev,
+                                [sid]: v,
+                              }));
                             }}
                             disabled={isBusy}
                           >
@@ -468,25 +516,19 @@ export default function RaceInlineEditor({ race, raceId, onBack }: Props) {
             </div>
 
             <div className="cluster cluster--between">
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={() => setStep("edit")}
-                disabled={isBusy}
+              <div
+                style={{ color: "var(--color-muted)", fontSize: "0.875rem" }}
               >
-                ‹ Back
-              </Button>
-
-              <div className="cluster">
-                <Button
-                  variant="success"
-                  size="md"
-                  disabled={isBusy || !allPlacesSelected || !placingsAreValid}
-                  onClick={() => completeMutation.mutate(buildCompleteParams())}
-                >
-                  Confirm &amp; complete
-                </Button>
+                Select places for each lane to complete the race.
               </div>
+              <Button
+                variant="success"
+                size="md"
+                disabled={isBusy || !allPlacesSelected || !placingsAreValid}
+                onClick={() => completeMutation.mutate(buildCompleteParams())}
+              >
+                Confirm &amp; complete
+              </Button>
             </div>
           </>
         )}

@@ -4,7 +4,11 @@ export interface RaceResult {
   place: number;
 }
 
-export type RaceResultParams = { place: number; student_id: number };
+export type RaceResultParams = {
+  id?: number;
+  place: number;
+  student_id: number
+};
 
 export function validatePlacings(places: Array<number | null>) {
   const compact = places.filter((p): p is number => Number.isInteger(p) && (p as number) > 0);
