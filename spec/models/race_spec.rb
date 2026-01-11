@@ -1,72 +1,82 @@
 require "rails_helper"
 
 RSpec.describe Race, type: :model do
-  let(:name) { "Test" }
-  let(:race) { create(:race, name: name, status: :draft) }
+  let(:name) { "Test race" }
 
   let(:s1) { create(:student) }
   let(:s2) { create(:student) }
   let(:s3) { create(:student) }
 
-  def assign_lanes(*students)
-    students.each_with_index do |student, idx|
-      create(:lane_assignment, race:, student:, lane_number: idx + 1)
+  def build_race_with_lanes(*students, name: "Test race", status: :draft)
+    build(:race, name:, status:).tap do |race|
+      students.each_with_index do |student, idx|
+        race.lane_assignments.build(student:, lane_number: idx + 1)
+      end
     end
   end
 
-  def add_results(places_by_student)
+  def add_results(race, places_by_student)
     places_by_student.each do |student, place|
-      create(:race_result, race:, student:, place:)
+      race.race_results.build(student:, place:)
     end
   end
 
   describe "validations" do
     context "when name is missing" do
-      let!(:name) { nil }
       it "requires name" do
+        race = build_race_with_lanes(s1, s2, name: nil)
+
         expect(race).not_to be_valid
+        expect(race.errors[:name]).to include("can't be blank")
       end
     end
 
-    context "when completed" do
-      it "requires at least MIN_STUDENTS lane assignments" do
-        create(:lane_assignment, race:, student: s1, lane_number: 1)
-
-        race.status = :completed
+    describe "lane assignment validation" do
+      it "requires at least MIN_STUDENTS lane assignments (runs for draft + completed)" do
+        race = build(:race, name:, status: :draft)
+        race.lane_assignments.build(student: s1, lane_number: 1)
 
         expect(race).not_to be_valid
         expect(race.errors[:lane_assignments]).to include(
           "At least #{Race::MIN_STUDENTS} students are required."
         )
       end
+    end
 
-      it "allows ties with valid competition ranking" do
-        assign_lanes(s1, s2, s3)
-        add_results(s1 => 1, s2 => 1, s3 => 3)
+    describe "race result validation (context: :complete)" do
+      it "does NOT validate race results in the default context" do
+        race = build_race_with_lanes(s1, s2, s3)
+        add_results(race, s1 => 1, s2 => 1, s3 => 2) # invalid ranking
 
-        race.status = :completed
         expect(race).to be_valid
       end
 
-      it "rejects invalid competition ranking" do
-        assign_lanes(s1, s2, s3)
-        add_results(s1 => 1, s2 => 1, s3 => 2) # should be 3
+      it "allows ties with valid competition ranking when completing" do
+        race = build_race_with_lanes(s1, s2, s3)
+        add_results(race, s1 => 1, s2 => 1, s3 => 3)
 
-        race.status = :completed
+        expect { race.complete! }.not_to raise_error
+        expect(race).to be_completed
+      end
 
-        expect(race).not_to be_valid
+      it "rejects invalid competition ranking when completing" do
+        race = build_race_with_lanes(s1, s2, s3)
+        add_results(race, s1 => 1, s2 => 1, s3 => 2) # should be 3
+
+        expect { race.complete! }.to raise_error(ActiveRecord::RecordInvalid)
         expect(race.errors[:race_results]).to include(
           "Places must follow competition ranking (e.g. 1,1,3 or 1,2,2,4)."
         )
       end
-    end
 
-    context "when draft" do
-      it "does not enforce ranking yet" do
-        assign_lanes(s1, s2, s3)
-        add_results(s1 => 1, s2 => 1, s3 => 2) # invalid ranking
+      it "can be checked directly via valid?(:complete)" do
+        race = build_race_with_lanes(s1, s2, s3)
+        add_results(race, s1 => 1, s2 => 1, s3 => 2) # invalid
 
-        expect(race).to be_valid
+        expect(race.valid?(:complete)).to eq(false)
+        expect(race.errors[:race_results]).to include(
+          "Places must follow competition ranking (e.g. 1,1,3 or 1,2,2,4)."
+        )
       end
     end
   end
