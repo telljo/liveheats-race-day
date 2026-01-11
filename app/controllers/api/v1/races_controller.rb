@@ -17,7 +17,7 @@ class Api::V1::RacesController < Api::V1::BaseController
     @race.status ||= :draft
 
     if @race.save
-      render json: @race.reload.as_json(include: [:lane_assignments, :race_results]), status: :created
+      render json: @race.reload.as_json(include: [ :lane_assignments, :race_results ]), status: :created
     else
       render_error(messages: @race.errors.full_messages, status: :unprocessable_entity)
     end
@@ -25,7 +25,7 @@ class Api::V1::RacesController < Api::V1::BaseController
 
   def update
     if @race.update(race_params)
-      render json: @race.reload.as_json(include: [:lane_assignments, :race_results]), status: :ok
+      render json: @race.reload.as_json(include: [ :lane_assignments, :race_results ]), status: :ok
     else
       render_error(messages: @race.errors.full_messages, status: :unprocessable_entity)
     end
@@ -36,7 +36,7 @@ class Api::V1::RacesController < Api::V1::BaseController
 
     begin
       @race.complete!
-      render json: @race.as_json(include: [:lane_assignments, :race_results]), status: :ok
+      render json: @race.as_json(include: [ :lane_assignments, :race_results ]), status: :ok
     rescue ActiveRecord::RecordInvalid
       render_error(messages: @race.errors.full_messages, status: :unprocessable_entity)
     end
@@ -66,7 +66,7 @@ class Api::V1::RacesController < Api::V1::BaseController
       race_results_attributes: [
         :id,
         :student_id,
-        :place,
+        :place
       ]
     )
   end

@@ -1,10 +1,10 @@
 class Api::V1::BaseController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render_error(messages: ["Not found"], status: :not_found)
+    render_error(messages: [ "Not found" ], status: :not_found)
   end
 
   rescue_from ActionController::ParameterMissing do |e|
-    render_error(messages: [e.message], status: :bad_request)
+    render_error(messages: [ e.message ], status: :bad_request)
   end
 
   rescue_from ActiveRecord::RecordInvalid do |e|
@@ -16,7 +16,7 @@ class Api::V1::BaseController < ApplicationController
     Rails.logger.error(e.message)
     Rails.logger.error(e.backtrace.join("\n")) if e.backtrace
 
-    render_error(messages: ["Server error"], status: :internal_server_error)
+    render_error(messages: [ "Server error" ], status: :internal_server_error)
   end
 
   private
