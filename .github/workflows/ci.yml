@@ -94,22 +94,22 @@ jobs:
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
 
-test_js:
-  runs-on: ubuntu-latest
+  test_js:
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: npm
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-    - name: Install JS dependencies
-      run: npm ci
+      - name: Install JS dependencies
+        run: npm ci
 
-    - name: Run Vitest
-      run: npm run test
+      - name: Run Vitest
+        run: npm run test
 
